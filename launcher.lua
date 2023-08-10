@@ -1,4 +1,8 @@
--- launcher app, lifted heavily from https://github.com/nwdamgaard/
+-- launcher app, thanks from https://github.com/nwdamgaard/ and elenapan's dots
+-- (nwdamgaard showcased the functionality of awesome in reading desktop files mostly)
+
+-- there are some custom theme variables set (beautiful.ui_cover_bg for instance, make sure those are set to reasonable colors)
+-- also, can change users.dirs.desktop to whatever your desktop directory is ("/home/user/Desktop" usually), or use /usr/share/applications instead
 
 local awful = require("awful")
 local beautiful = require("beautiful")
@@ -9,6 +13,7 @@ local wibox = require("wibox")
 local helpers = require("helpers")
 local schema_helpers = require("schema.schema_helpers")
 
+-- variables for display
 local MAX_DISPLAYED = 8
 local PROGRAM_HEIGHT = 60
 local TOTAL_HEIGHT = MAX_DISPLAYED*PROGRAM_HEIGHT
@@ -48,7 +53,7 @@ local programs_box = helpers.package(programs_widget, dpi(400), dpi(TOTAL_HEIGHT
 programs_box.children[1].shape = helpers.prrect(beautiful.ui_radius, false, false, true, true)
 programs_box.margins = {top=dpi(-beautiful.ui_border_width), left=0, right=0, down=0}
 awful.spawn.with_line_callback([[ bash -c "find ]]..user.dirs.desktop..[[ -type f -name '*.desktop'"]], {
--- awful.spawn.with_line_callback([[ bash -c "find /usr/share/applications -type f -name '*.desktop'"]], {
+-- awful.spawn.with_line_callback([[ bash -c "find /usr/share/applications -type f -name '*.desktop'"]], { -- can also search for desktop files in /usr/share/applications
     stdout = function(line)
         local program = menubar.utils.parse_desktop_file(line)
         if not program.Comment then
